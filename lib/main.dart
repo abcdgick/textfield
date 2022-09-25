@@ -52,7 +52,8 @@ class _HomeState extends State<Home> {
                     tooltip: "More",
                   )
                 ]),
-            body: Container(
+            body: SingleChildScrollView(
+                child: Container(
               padding: const EdgeInsets.all(25),
               child: Form(
                   key: _formKey,
@@ -257,6 +258,6 @@ class _HomeState extends State<Home> {
                               }
                             }))
                   ])),
-            )));
+            ))));
   }
 }
