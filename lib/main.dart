@@ -1,11 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(home: Home());
+  }
+}
+
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final dateInput = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,32 +65,34 @@ class MyApp extends StatelessWidget {
             const SizedBox(
               height: 25,
             ),
-            Row(
-              children: const [
-                Icon(Icons.phone),
-                SizedBox(width: 15),
-                Expanded(
-                  child: TextField(
-                      decoration: InputDecoration(
-                          labelText: "Phone",
-                          labelStyle: TextStyle(color: Colors.black87),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.black54, width: 2.0)))),
-                ),
-                SizedBox(width: 15),
-                Expanded(
-                  child: TextField(
-                      decoration: InputDecoration(
-                          labelText: "Area",
-                          labelStyle: TextStyle(color: Colors.black87),
-                          suffixIcon: Icon(Icons.arrow_drop_down),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.black54, width: 2.0)))),
-                )
-              ],
-            ),
+            Row(children: [
+              const Icon(Icons.phone),
+              const SizedBox(width: 15),
+              const Expanded(
+                child: TextField(
+                    decoration: InputDecoration(
+                        labelText: "Phone",
+                        labelStyle: TextStyle(color: Colors.black87),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.black54, width: 2.0)))),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                  child: DropdownButtonFormField<String>(
+                items: <String>['Dis', 'Nut'].map((String value) {
+                  return DropdownMenuItem<String>(
+                      value: value, child: Text(value));
+                }).toList(),
+                onChanged: (value) => value,
+                decoration: const InputDecoration(
+                    labelText: "Area",
+                    labelStyle: TextStyle(color: Colors.black87),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.black54, width: 2.0))),
+              ))
+            ]),
             const SizedBox(height: 25),
             TextFormField(
               cursorColor: Colors.white,
@@ -102,21 +121,25 @@ class MyApp extends StatelessWidget {
               height: 25,
             ),
             Row(
-              children: const [
-                Icon(null),
-                SizedBox(width: 15),
+              children: [
+                const Icon(null),
+                const SizedBox(width: 15),
                 Expanded(
-                  child: TextField(
-                      decoration: InputDecoration(
-                          labelText: "State",
-                          labelStyle: TextStyle(color: Colors.black87),
-                          suffixIcon: Icon(Icons.arrow_drop_down),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.black54, width: 2.0)))),
-                ),
-                SizedBox(width: 15),
-                Expanded(
+                    child: DropdownButtonFormField<String>(
+                  items: <String>['Fuck', 'You'].map((String value) {
+                    return DropdownMenuItem<String>(
+                        value: value, child: Text(value));
+                  }).toList(),
+                  onChanged: (value) => value,
+                  decoration: const InputDecoration(
+                      labelText: "State",
+                      labelStyle: TextStyle(color: Colors.black87),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black54, width: 2.0))),
+                )),
+                const SizedBox(width: 15),
+                const Expanded(
                   child: TextField(
                       decoration: InputDecoration(
                           labelText: "Zip",
@@ -140,12 +163,27 @@ class MyApp extends StatelessWidget {
             ),
             const SizedBox(height: 25),
             TextFormField(
+              controller: dateInput,
+              readOnly: true,
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101));
+                if (pickedDate != null) {
+                  String formattedDate =
+                      DateFormat('dd MMMM yyyy').format(pickedDate);
+                  setState(() {
+                    dateInput.text = formattedDate;
+                  });
+                } else {}
+              },
               cursorColor: Colors.white,
               decoration: const InputDecoration(
                   icon: Icon(Icons.cake),
                   labelText: "Birthday",
                   labelStyle: TextStyle(color: Colors.black87),
-                  suffixIcon: Icon(Icons.event),
                   enabledBorder: OutlineInputBorder(
                       borderSide:
                           BorderSide(color: Colors.black54, width: 2.0))),
